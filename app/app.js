@@ -7,7 +7,7 @@ const path = require('path');
 const Consulta = require("./model/query");
 
 const EntidadePersonPerson = require("./model/EntidadePersonPerson");
-const { Int, Bit } = require("mssql");
+const { Int, Bit, NVarChar } = require("mssql");
 
 
 app.use(express.json());
@@ -103,7 +103,7 @@ try {
 
     var{  
 
-        BusnessEntityID,
+        BusinessEntityID,
 
         PersonType,
 
@@ -123,13 +123,36 @@ try {
 
     } = req.body;
 
+    console.log(req.body);
+   
 
-    EmailPromotional = Int(EmailPromotional);
 
-    BusnessEntityID = Int(BusnessEntityID);
+    BusinessEntityID = parseInt(BusinessEntityID)
+
+    /*PersonType = NVarChar(PersonType);
+
+    NameStyle = Bit(NameStyle);
+
+    Title = NVarChar(Title);
+
+    FirstName = NVarChar(FirstName);
+
+    MiddleName = NVarChar(MiddleName);
+
+    LastName = NVarChar(LastName);
+
+    Suffix = NVarChar(Suffix);*/
+
+    EmailPromotional = parseInt(EmailPromotional);
+
+    console.log(BusinessEntityID);
+
+    console.log(BusinessEntityID[0])
 
 
     const instancia = new EntidadePersonPerson(
+
+        BusinessEntityID,
 
         PersonType,
 
@@ -150,7 +173,7 @@ try {
     );
 
 
-    const resultado = await instancia.UpdateMethod(BusnessEntityID);
+    const resultado = await instancia.UpdateMethod(BusinessEntityID);
     
 
     console.log(resultado);

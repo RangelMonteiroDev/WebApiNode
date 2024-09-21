@@ -14,7 +14,10 @@ class EntidadePersonPerson{
 
 
     constructor
-      ( PersonType,
+      ( 
+        BusinessEntityID,
+
+        PersonType,
 
         NameStyle,
 
@@ -32,6 +35,7 @@ class EntidadePersonPerson{
         
         ) {
 
+            this.BusinessEntityID = BusinessEntityID
 
             this.PersonType = PersonType;
 
@@ -104,11 +108,27 @@ class EntidadePersonPerson{
             )
             
             `
+            /*const BusinessEntityID = Int(this.BusinessEntityID);
 
+            const PersonType = NVarChar(this.PersonType);
+
+            const NameStyle = Bit(this.NameStyle);
+
+            const Title = NVarChar(this.Title);
+
+            const FirstName = NVarChar(this.FirstName);
+
+            const MiddleName = NVarChar(this.MiddleName);
+
+            const LastName = NVarChar(this.LastName);
+
+            const Suffix = NVarChar(this.Suffix);
+
+            const EmailPromotional = Int(this.EmailPromotional);*/
             
 
             const resultado = await conexao.request()
-            .input('BusinessEntityID', sql.Int, sequenceBusiness)
+            .input('BusinessEntityID', sql.Int,this.BusinessEntityID)
             .input('PersonType', sql.NChar(2), this.PersonType)
             .input('NameStyle', sql.Bit, this.NameStyle)
             .input('Title', sql.NVarChar(8), this.Title)
@@ -131,24 +151,61 @@ class EntidadePersonPerson{
 
    async UpdateMethod( id) {
 
+
+
         try {
 
             const consulta = `
             
-            ALTER TABLE Person.Person
+            UPDATE Person.Person
             
-            SET PersonType = ${this.PersonType}, NameStyle = ${this.NameStyle},
+            SET PersonType = @PersonType, NameStyle = @NameStyle,
 
-            Title = ${this.Title}, FirstName = ${this.FirstName},
+            Title = @Title, FirstName = @FirstName,
 
-            MiddleName = ${this.MiddleName}, LastName = ${this.LastName},
+            MiddleName = @MiddleName, LastName = @LastName,
 
-            Suffix = ${this.Suffix}, EmailPromotional = ${this.EmailPromotional}
+            Suffix = @Suffix
             
-            WHERE BusinessEntityID = ${id}
+            WHERE BusinessEntityID = @BusinessEntityID
             `
+            const conexao = await sql.connect(config);
+
+
+            /*const BusinessEntityID = sql.Int(this.BusinessEntityID);
+
+            const PersonType = sql.NVarChar(this.PersonType);
+
+            const NameStyle = sql.Bit(this.NameStyle);
+
+            const Title = sql.NVarChar(this.Title);
+
+            const FirstName = sql.NVarChar(this.FirstName);
+
+            const MiddleName = sql.NVarChar(this.MiddleName);
+
+            const LastName = sql.NVarChar(this.LastName);
+
+            const Suffix = sql.NVarChar(this.Suffix);
+
+            console.log(this.BusinessEntityID);
+
+            console.log(typeof BusinessEntityID)*/
+
+            console.log(this.BusinessEntityID);
+
+            console.log(typeof this.BusinessEntityID);
            
-            const resultado = await conexao.query(consulta);
+            const resultado = await conexao.request()
+            .input('BusinessEntityID', sql.Int,this.BusinessEntityID)
+            .input('PersonType', sql.NChar(2), this.PersonType)
+            .input('NameStyle', sql.Bit, this.NameStyle)
+            .input('Title', sql.NVarChar(8), this.Title)
+            .input('FirstName', sql.NVarChar(50),this.FirstName )
+            .input('MiddleName',sql.NVarChar(50),this.MiddleName )
+            .input('LastName', sql.NVarChar(50), this.LastName)
+            .input('Suffix', sql.NVarChar(10), this.Suffix )
+            .query(consulta);
 
             return resultado;
             
