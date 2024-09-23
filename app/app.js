@@ -8,9 +8,36 @@ const Consulta = require("./model/query");
 
 const EntidadePersonPerson = require("./model/EntidadePersonPerson");
 const { Int, Bit, NVarChar } = require("mssql");
+const BusinessEntityID = require("./model/BusinessEntityID");
 
 
 app.use(express.json());
+
+
+app.put('/Teste/Conexao/Node/BusinessEntity/Inserir', async (req, res)=>{
+
+try {
+
+    var{rowguid, ModifiedDate} = req.body;
+
+    const instancia = new BusinessEntityID(rowguid, ModifiedDate);
+
+    const resultado = await instancia.CreateMethod();
+
+    console.log(resultado);
+
+    res.json(resultado);
+
+
+} catch (error) {
+
+    throw error;
+    
+}
+
+
+
+})
 
 
 app.get('/Teste/Conexao/Node/Person/Person/Consulta', async (req, res)=>{
