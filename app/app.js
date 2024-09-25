@@ -2,19 +2,17 @@ const express = require("express");
 
 const app = express();
 
-const path = require('path');
-
 const Consulta = require("./model/query");
 
-const EntidadePersonPerson = require("./model/EntidadePersonPerson");
-const { Int, Bit, NVarChar } = require("mssql");
+
 const BusinessEntityID = require("./model/BusinessEntityID");
 
+const rotas = require("./controllers/rotas");
 
 app.use(express.json());
 
 
-app.put('/Teste/Conexao/Node/BusinessEntity/Inserir', async (req, res)=>{
+app.post('/Teste/Conexao/Node/BusinessEntity/Inserir', async (req, res)=>{
 
 try {
 
@@ -40,213 +38,32 @@ try {
 })
 
 
-app.get('/Teste/Conexao/Node/Person/Person/Consulta', async (req, res)=>{
+const httpRotaGetPerson = 'http://localhost:3000/Teste/Conexao/Node/Person/Person/Consulta';
 
-    try {
+const httpRotaPostPerson = 'http://localhost:3000/Teste/Conexao/Node/Person/Person/Envio';
 
-        const instancia =  new Consulta("SELECT * FROM Person.Person");
+const httpRotaPutPerson = 'http://localhost:3000/Teste/Conexao/Node/Person/Person/Atualizacao';
 
-        const resultado = await instancia.ExecutarConsulta();
+const httpRotaDeletePerson = 'http://localhost:3000/Teste/Conexao/Node/Person/Person/Exclusao';
 
-        console.log(resultado);
 
-        res.json(resultado);
+
+
+app.get('/master-rota/teste/node', async (req, res)=>{
+    
+    const arrayRotas = [
         
+        httpRotaGetPerson, httpRotaPostPerson, 
         
-    } catch (error) {
-
-        throw error
-        
-    }
-
-
-});
-
-app.post('/Teste/Conexao/Node/Person/Person/Envio', async (req, res) =>{
-
-    try {
-
-        var{
-            PersonType,
-
-            NameStyle,
+        httpRotaPutPerson, httpRotaDeletePerson
     
-            Title,
-    
-            FirstName,
-    
-            MiddleName,
-    
-            LastName,
-    
-            Suffix,
-    
-            EmailPromotional
-    
-        } = req.body;
+    ]
 
+res.json(arrayRotas);
 
-        EmailPromotional = Int(EmailPromotional);
-
-        NameStyle = Bit(NameStyle);
-
-
-        const instancia = new EntidadePersonPerson( PersonType,
-
-            NameStyle,
-    
-            Title,
-    
-            FirstName,
-    
-            MiddleName,
-    
-            LastName,
-    
-            Suffix,
-    
-            EmailPromotional);
-
-        const resultado = await instancia.CreateMethod()
-    
-
-        console.log(resultado);
-
-        res.json(resultado);
-        
-    } catch (error) {
-
-        throw error;
-        
-    }
-
-
-});
-
-app.put('/Teste/Conexao/Node/Person/Person/Atualizacao', async (req, res)=>{
-
-try {
-
-
-    var{  
-
-        BusinessEntityID,
-
-        PersonType,
-
-        NameStyle,
-
-        Title,
-
-        FirstName,
-
-        MiddleName,
-
-        LastName,
-
-        Suffix,
-
-        EmailPromotional
-
-    } = req.body;
-
-    console.log(req.body);
-   
-
-
-    BusinessEntityID = parseInt(BusinessEntityID)
-
-    /*PersonType = NVarChar(PersonType);
-
-    NameStyle = Bit(NameStyle);
-
-    Title = NVarChar(Title);
-
-    FirstName = NVarChar(FirstName);
-
-    MiddleName = NVarChar(MiddleName);
-
-    LastName = NVarChar(LastName);
-
-    Suffix = NVarChar(Suffix);*/
-
-    EmailPromotional = parseInt(EmailPromotional);
-
-    console.log(BusinessEntityID);
-
-    console.log(BusinessEntityID[0])
-
-
-    const instancia = new EntidadePersonPerson(
-
-        BusinessEntityID,
-
-        PersonType,
-
-        NameStyle,
-
-        Title,
-
-        FirstName,
-
-        MiddleName,
-
-        LastName,
-
-        Suffix,
-
-        EmailPromotional
-
-    );
-
-
-    const resultado = await instancia.UpdateMethod(BusinessEntityID);
-    
-
-    console.log(resultado);
-
-    res.json(resultado);
-
-    
-} catch (error) {
-
-    throw error;
-    
-}
-
-});
-
-
-app.delete('/Teste/Conexao/Node/Person/Person/Atualizacao', async (req,res) => {
-
-
-    const BusinessEntityID = req.body;
-
-    try {
-
-        const instancia = new EntidadePersonPerson();
-
-        const resultado = await instancia.DeleteMethod(BusinessEntityID);
-
-        console.log(resultado);
-
-        res.json(resultado);
-        
-    } catch (error) {
-
-        throw error;
-        
-    }
 
 
 })
-
-
-
-
-
-
-
 
 
 
@@ -296,6 +113,7 @@ app.get('/Teste/Conexao/Node/Person/Password', async (req,res)=>{
 })
 
 
+rotas(app)
 
 
 app.listen(3000, ()=>{

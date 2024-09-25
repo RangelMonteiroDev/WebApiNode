@@ -1,12 +1,12 @@
 const config = {
 
-    user : '####',
+    user : '#####',
 
-    password : '######',
+    password : '#########',
 
-    database : '#######',
+    database : '###########',
 
-    server : '#######', 
+    server : '########', 
 
     options: {
         encrypt: true,              // Ativa a criptografia
